@@ -52,3 +52,19 @@ try {
 } catch(Exception e) {
     logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
 }
+
+android {
+  signingConfigs {
+    release {
+      storeFile file(System.getenv("HOME") + "/cns.keystore")
+      storePassword System.getenv("KEY_PASS")
+      keyAlias System.getenv("KEY_ALIAS")
+      keyPassword System.getenv("KEY_PASS")
+    }
+  }
+  buildTypes {
+    release {
+      signingConfig signingConfigs.release
+    }
+  }
+}
