@@ -19,7 +19,7 @@ function greet(){return who=="x"?"Bonjour, je suis Xianis. Dis-moi ce que tu aim
 function open(){$("#aiwin").classList.remove("hidden");if(!greeted){greeted=true;say(greet())}}
 function close(){$("#aiwin").classList.add("hidden");if(window.Android&&Android.stopSpeak)Android.stopSpeak();if(window.speechSynthesis)speechSynthesis.cancel()}
 let H=[];try{H=JSON.parse(localStorage.getItem("aihist")||"[]")||[]}catch(e){H=[]}
-const sty=document.createElement("style");sty.textContent=".msg{word-break:break-word}.msg.sel{outline:2px solid var(--ac)}.mdel{display:block;margin-top:8px;border:1px solid #EF2B2D;background:#EF2B2D22;color:#ff6b6b;border-radius:10px;padding:6px 10px;font-size:12px}.msg.u .mdel{color:#500;background:#fff7;border-color:#500}#aiclr{border:1px solid #EF2B2D!important;color:#ff6b6b!important}#aiclr.warn{background:#EF2B2D!important;color:#fff!important}";document.head.appendChild(sty);
+const sty=document.createElement("style");sty.textContent=".msg{word-break:break-word}.msg.sel{outline:2px solid var(--ac)}.mdel{display:block;margin-top:8px;border:1px solid #EF2B2D;background:rgba(239,43,45,0.133);color:#ff6b6b;border-radius:10px;padding:6px 10px;font-size:12px}.msg.u .mdel{color:#500;background:#fff7;border-color:#500}#aiclr{border:1px solid #EF2B2D!important;color:#ff6b6b!important}#aiclr.warn{background:#EF2B2D!important;color:#fff!important}";document.head.appendChild(sty);
 function sv(){try{localStorage.setItem("aihist",JSON.stringify(H.slice(-200)))}catch(e){}}
 function unsel(){document.querySelectorAll("#aim .msg.sel").forEach(x=>{x.classList.remove("sel");const b=x.querySelector(".mdel");b&&b.remove()})}
 function mk(o){const m=document.createElement("div");m.className="msg "+o.c;m.textContent=o.t;
