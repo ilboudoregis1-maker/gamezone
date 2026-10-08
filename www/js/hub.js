@@ -1,4 +1,3 @@
-function isLogged(){try{for(const k of Object.keys(localStorage)){const v=localStorage.getItem(k)||"";if(v.indexOf("access_token")>-1)return true}}catch(e){}return false}
 const $=(s,e=document)=>e.querySelector(s);
 const G={};let cur=null,t0=Date.now();const mounted={};
 const fm=s=>s<60?Math.round(s)+" s":s<3600?Math.floor(s/60)+" min":(s/3600).toFixed(1)+" h";
@@ -27,7 +26,7 @@ if(!mounted[id]){const el=document.createElement("div");el.className="gwrap";$("
 mounted[id].style.display="flex"}
 function closeGame(){flush();cur=null;$("#gameLayer").classList.add("hidden");renderHub()}
 function renderHub(){
-$("#hub").innerHTML=GAMES.filter((g,i)=>isLogged()||i<3).map(g=>{const s=S.g(g.id);return '<div class="card"><div class="cover" style="--gc:'+g.c[0]+'">'+icon(g.i)+(g.m?'<span class="badge">'+icon("users")+" "+g.m+"</span>":"")+'</div><div class="info"><h3>'+g.n+"</h3><p>"+g.d+'</p><div class="meta"><span>'+icon("trophy")+" <b>"+s.best+"</b></span><span>"+icon("clock")+" <b>"+fm(s.time)+'</b></span></div><div class="meta"><span>Dernier <b>'+s.last+"</b></span><span>Parties <b>"+s.plays+'</b></span></div><button class="btn" data-g="'+g.id+'">'+((mounted[g.id]||s.state)?icon("resume")+" Reprendre":icon("play")+" Jouer")+"</button></div></div>"}).join("");if(!isLogged())$("#hub").insertAdjacentHTML("afterbegin",'<p style="color:#ffd426;padding:12px;text-align:center">Sans compte, seuls 3 jeux sont accessibles. Crée un compte pour débloquer tous les jeux.</p>');
+$("#hub").innerHTML=GAMES.map(g=>{const s=S.g(g.id);return '<div class="card"><div class="cover" style="--gc:'+g.c[0]+'">'+icon(g.i)+(g.m?'<span class="badge">'+icon("users")+" "+g.m+"</span>":"")+'</div><div class="info"><h3>'+g.n+"</h3><p>"+g.d+'</p><div class="meta"><span>'+icon("trophy")+" <b>"+s.best+"</b></span><span>"+icon("clock")+" <b>"+fm(s.time)+'</b></span></div><div class="meta"><span>Dernier <b>'+s.last+"</b></span><span>Parties <b>"+s.plays+'</b></span></div><button class="btn" data-g="'+g.id+'">'+((mounted[g.id]||s.state)?icon("resume")+" Reprendre":icon("play")+" Jouer")+"</button></div></div>"}).join("");
 document.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>openGame(b.dataset.g));
 $("#totalTime").innerHTML="Temps de jeu<br><b>"+fm(GAMES.reduce((a,g)=>a+S.g(g.id).time,0))+"</b>"}
 $("#gameLayer").innerHTML='<div class="gbar"><button class="ibtn" id="gb">'+icon("back")+'</button><b id="gt"></b><span id="gs"></span></div><div id="gbody"></div>';
