@@ -1,0 +1,25 @@
+:root{--bg:#0c0e11;--card:#14171c;--line:rgba(255,255,255,.07);--mute:#8b94a1;--text:#eef1f5}
+html,body{background:var(--bg)}
+.fabric{display:none}
+.top{background:linear-gradient(var(--bg) 75%,transparent);padding-bottom:16px}
+.top::after{left:18px;right:18px;bottom:8px;height:1px;border-radius:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent)}
+.brand h1{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#eef1f5;font-size:19px;letter-spacing:5px;font-weight:700}
+.brand small{color:#c9b86a;font-size:11px;letter-spacing:2px;opacity:.85}
+#logo{border-radius:12px;overflow:hidden}
+.stat{font-size:11px;letter-spacing:.5px}.stat b{color:var(--text);font-weight:600}
+#hub{gap:14px;padding:18px 16px 130px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:0 10px 30px rgba(0,0,0,.35);animation:cin .5s both}
+.card:nth-child(2){animation-delay:.04s}.card:nth-child(3){animation-delay:.08s}.card:nth-child(4){animation-delay:.12s}.card:nth-child(5){animation-delay:.16s}.card:nth-child(6){animation-delay:.2s}.card:nth-child(7){animation-delay:.24s}.card:nth-child(8){animation-delay:.28s}.card:nth-child(9){animation-delay:.32s}
+@keyframes cin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.cover{height:104px;background:#181c22;background:radial-gradient(circle at 30% 0%,color-mix(in srgb,var(--gc,#888) 26%,transparent),transparent 72%),#161a20}
+.cover::before{display:none}
+.cover svg.cv{display:none}
+.cover svg{width:30px;height:30px;padding:15px;box-sizing:content-box;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);color:#eef1f5;color:color-mix(in srgb,var(--gc,#fff) 45%,#fff);filter:none;stroke-width:1.6}
+.badge{top:10px;right:10px;background:rgba(255,255,255,.07);border:1px solid var(--line);color:#d8dde4;font-size:10px;padding:3px 9px;backdrop-filter:blur(6px)}
+.badge svg{width:11px;height:11px;padding:0;border:0;background:none;border-radius:0;color:inherit}
+.info{padding:14px}
+.info h3{font-size:15px;font-weight:600;letter-spacing:.2px;margin-bottom:3px}
+.info p{font-size:12px;color:var(--mute);margin-bottom:12px;line-height:1.35}
+.meta{font-size:11px;margin-bottom:3px}.meta b{font-weight:600}
+.btn{margin-top:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#eef1f5;border-radius:14px;padding:11px;font-weight:600;font-size:13px;letter-spacing:.3px;box-shadow:none;text-transform:none}
+.btn:active{background:rgba(255,255,255,.12)}

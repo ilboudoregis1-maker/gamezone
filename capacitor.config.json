@@ -1,0 +1,8 @@
+{
+  "appId": "com.cns.gamezone",
+  "appName": "Game-Zone",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  }
+}
