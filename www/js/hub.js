@@ -1,4 +1,4 @@
-function isLogged(){try{return !!JSON.parse(localStorage.getItem('fr_acct')||'null')}catch(e){return false}}
+function isLogged(){try{for(const k of Object.keys(localStorage)){const v=localStorage.getItem(k)||"";if(v.indexOf("access_token")>-1)return true}}catch(e){}return false}
 const $=(s,e=document)=>e.querySelector(s);
 const G={};let cur=null,t0=Date.now();const mounted={};
 const fm=s=>s<60?Math.round(s)+" s":s<3600?Math.floor(s/60)+" min":(s/3600).toFixed(1)+" h";
