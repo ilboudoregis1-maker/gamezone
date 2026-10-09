@@ -18,6 +18,20 @@
 <main id="hub"></main>
 <div id="gameLayer" class="hidden"></div>
 <div id="aiLayer"></div>
+<script>(function(){
+var P=function(){return window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.SpeechRecognition};
+var want=false,busy=false;
+function ok(){var S=P();if(!S)return Promise.resolve(false);return S.requestPermissions().then(function(r){return r&&r.speechRecognition==="granted"}).catch(function(){return false})}
+function loop(){if(!want||busy)return;var S=P();if(!S)return;busy=true;
+S.start({language:"fr-FR",maxResults:3,partialResults:true,popup:false}).then(function(r){busy=false;var m=(r&&r.matches)||[];if(m[0]&&window.onHeard)window.onHeard(m[0]);if(want)setTimeout(loop,250)}).catch(function(){busy=false;if(want)setTimeout(loop,800)})}
+window.Android={
+start:function(){want=true;ok().then(function(g){if(g)loop();else want=false})},
+stop:function(){want=false;var S=P();if(S)S.stop().catch(function(){})},
+speak:function(t){if(!window.speechSynthesis)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";speechSynthesis.speak(u)}
+};
+function attach(){var S=P();if(!S)return setTimeout(attach,500);S.addListener("partialResults",function(d){var m=(d&&d.matches)||[];if(m[0]&&window.onPartial)window.onPartial(m[0])})}
+attach();
+})();</script>
 <script src="js/icons.js"></script><script src="js/covers.js"></script>
 <script src="js/store.js"></script>
 <script src="js/hub.js"></script>
