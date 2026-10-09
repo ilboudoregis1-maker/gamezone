@@ -35,5 +35,19 @@ speak:function(t){try{if(!window.speechSynthesis)return;speechSynthesis.cancel()
 <script src="js/icons.js"></script><script src="js/covers.js"></script>
 <script src="js/store.js"></script>
 <script src="js/hub.js"></script>
-<script src="games/g0.js"></script><script src="games/tam.js"></script><script src="games/gri.js"></script><script src="games/lab.js"></script><script src="games/bao.js"></script><script src="games/cau.js"></script><script src="games/duel.js"></script><script src="games/ter.js"></script><script src="js/ai.js"></script><script src="js/voice.js"></script><script src="js/bf.js"></script><script src="js/bf2.js"></script><script src="js/talk.js"></script><script src="js/mic.js"></script><script src="js/three.min.js"></script><script src="games/faso.js"></script><script src="js/kb.js"></script><script src="js/auth.js"></script></body>
+<script src="games/g0.js"></script><script src="games/tam.js"></script><script src="games/gri.js"></script><script src="games/lab.js"></script><script src="games/bao.js"></script><script src="games/cau.js"></script><script src="games/duel.js"></script><script src="games/ter.js"></script><script src="js/ai.js"></script><script src="js/voice.js"></script><script src="js/bf.js"></script><script src="js/bf2.js"></script><script src="js/talk.js"></script><script src="js/mic.js"></script><script src="js/three.min.js"></script><script src="games/faso.js"></script><script src="js/kb.js"></script><script src="js/auth.js"></script>
+<script>(function(){
+function T(){return window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.TextToSpeech}
+var all=[],idx={x:undefined,n:undefined};
+function fr(v){return v&&v.lang&&String(v.lang).toLowerCase().indexOf("fr")===0}
+function gender(v){var n=(v.name||"")+" "+(v.voiceURI||"");if(/female|femme|fem|woman|girl/i.test(n))return "f";if(/male|homme|masc|man|guy/i.test(n))return "m";return "?"}
+function load(){var S=T();if(!S||!S.getSupportedVoices)return;S.getSupportedVoices().then(function(r){all=(r&&r.voices)||[];var fx=[];all.forEach(function(v,i){if(fr(v))fx.push(i)});var m=fx.filter(function(i){return gender(all[i])==="m"}),f=fx.filter(function(i){return gender(all[i])==="f"});idx.x=f.length?f[0]:(fx.length?fx[0]:undefined);idx.n=m.length?m[0]:(fx.length>1?fx[1]:idx.x)}).catch(function(){})}
+window.Android=window.Android||{};
+window.Android.speak=function(t,who){var S=T();var k=who==="n"?"n":"x";
+if(!S){if(window.speechSynthesis){speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.pitch=k==="x"?1.1:0.9;speechSynthesis.speak(u)}return}
+var opt={text:t,lang:"fr-FR",rate:1,volume:1,pitch:k==="x"?1.08:0.9,category:"ambient"};if(idx[k]!==undefined)opt.voice=idx[k];
+S.stop().catch(function(){}).then(function(){return S.speak(opt)}).catch(function(){})};
+if(T())load();else setTimeout(load,1500);
+})();</script>
+</body>
 </html>
