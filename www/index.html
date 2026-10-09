@@ -18,36 +18,33 @@
 <main id="hub"></main>
 <div id="gameLayer" class="hidden"></div>
 <div id="aiLayer"></div>
-<script>(function(){
-var P=function(){return window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.SpeechRecognition};
-var want=false,busy=false,fails=0;
-function ok(){var S=P();if(!S)return Promise.resolve(false);return S.requestPermissions().then(function(r){return r&&r.speechRecognition==="granted"}).catch(function(){return false})}
-function norm(x){return x.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
-function pick(m){for(var i=0;i<m.length;i++){if(/xian|nix|nis|nics|nicks|xan/.test(norm(m[i])))return m[i]}return m[0]||""}
-function loop(){if(!want||busy)return;var S=P();if(!S)return;busy=true;
-S.start({language:"fr-FR",maxResults:5,partialResults:false,popup:false}).then(function(r){busy=false;fails=0;var t=pick((r&&r.matches)||[]);if(t&&window.onHeard)window.onHeard(t);if(want)setTimeout(loop,1500)}).catch(function(){busy=false;fails++;if(!want)return;if(fails>=4){want=false;return}setTimeout(loop,2500)})}
-window.Android={
-start:function(){if(want)return;want=true;fails=0;ok().then(function(g){if(g)loop();else want=false})},
-stop:function(){want=false;var S=P();if(S)S.stop().catch(function(){})},
-speak:function(t){try{if(!window.speechSynthesis)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";speechSynthesis.speak(u)}catch(e){}}
-};
-})();</script>
+
 <script src="js/icons.js"></script><script src="js/covers.js"></script>
 <script src="js/store.js"></script>
 <script src="js/hub.js"></script>
 <script src="games/g0.js"></script><script src="games/tam.js"></script><script src="games/gri.js"></script><script src="games/lab.js"></script><script src="games/bao.js"></script><script src="games/cau.js"></script><script src="games/duel.js"></script><script src="games/ter.js"></script><script src="js/ai.js"></script><script src="js/voice.js"></script><script src="js/bf.js"></script><script src="js/bf2.js"></script><script src="js/talk.js"></script><script src="js/mic.js"></script><script src="js/three.min.js"></script><script src="games/faso.js"></script><script src="js/kb.js"></script><script src="js/auth.js"></script>
+
 <script>(function(){
-function T(){return window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.TextToSpeech}
-var all=[],idx={x:undefined,n:undefined};
-function fr(v){return v&&v.lang&&String(v.lang).toLowerCase().indexOf("fr")===0}
-function gender(v){var n=(v.name||"")+" "+(v.voiceURI||"");if(/female|femme|fem|woman|girl/i.test(n))return "f";if(/male|homme|masc|man|guy/i.test(n))return "m";return "?"}
-function load(){var S=T();if(!S||!S.getSupportedVoices)return;S.getSupportedVoices().then(function(r){all=(r&&r.voices)||[];var fx=[];all.forEach(function(v,i){if(fr(v))fx.push(i)});var m=fx.filter(function(i){return gender(all[i])==="m"}),f=fx.filter(function(i){return gender(all[i])==="f"});idx.x=f.length?f[0]:(fx.length?fx[0]:undefined);idx.n=m.length?m[0]:(fx.length>1?fx[1]:idx.x)}).catch(function(){})}
-window.Android=window.Android||{};
-window.Android.speak=function(t,who){var S=T();var k=who==="n"?"n":"x";
-if(!S){if(window.speechSynthesis){speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.pitch=k==="x"?1.1:0.9;speechSynthesis.speak(u)}return}
-var opt={text:t,lang:"fr-FR",rate:1,volume:1,pitch:k==="x"?1.08:0.9,category:"ambient"};if(idx[k]!==undefined)opt.voice=idx[k];
-S.stop().catch(function(){}).then(function(){return S.speak(opt)}).catch(function(){})};
-if(T())load();else setTimeout(load,1500);
+var SR=function(){return window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.SpeechRecognition};
+var TT=function(){return window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.TextToSpeech};
+var want=false,busy=false,talking=false,fails=0,idx={x:undefined,n:undefined},vs=[];
+function fr(v){return v&&String(v.lang||"").toLowerCase().indexOf("fr")===0}
+function femaleName(v){return /female|femme|fem|woman|vfb|vfc|vfa|x-fra|x-fre/i.test((v.name||"")+" "+(v.voiceURI||""))}
+function pickVoices(){var S=TT();if(!S||!S.getSupportedVoices)return;S.getSupportedVoices().then(function(r){vs=((r&&r.voices)||[]).map(function(v,i){return {i:i,v:v}}).filter(function(o){return fr(o.v)});if(!vs.length)return;var f=vs.filter(function(o){return femaleName(o.v)}),m=vs.filter(function(o){return !femaleName(o.v)});idx.x=(f.length?f[0]:vs[0]).i;idx.n=(m.length?m[0]:vs[vs.length-1]).i}).catch(function(){})}
+function norm(x){return x.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+function pick(m){for(var i=0;i<m.length;i++){if(/xian|nix|nis|nics|nicks|xan/.test(norm(m[i])))return m[i]}return m[0]||""}
+function stopRec(){var S=SR();if(S)S.stop().catch(function(){})}
+function loop(){if(!want||busy||talking)return;var S=SR();if(!S)return;busy=true;
+S.start({language:"fr-FR",maxResults:5,partialResults:false,popup:false}).then(function(r){busy=false;fails=0;var t=pick((r&&r.matches)||[]);if(t&&!talking&&window.onHeard)window.onHeard(t);if(want&&!talking)setTimeout(loop,1500)}).catch(function(){busy=false;fails++;if(!want)return;if(fails>=4){want=false;return}if(!talking)setTimeout(loop,2500)})}
+window.Android={
+start:function(){if(want)return;want=true;fails=0;var S=SR();if(!S){want=false;return}S.requestPermissions().then(function(r){if(r&&r.speechRecognition==="granted")loop();else want=false}).catch(function(){want=false})},
+stop:function(){want=false;stopRec()},
+speak:function(t,who){var k=who==="n"?"n":"x";var T=TT();
+if(!T){if(window.speechSynthesis){speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.pitch=k==="n"?0.7:1.15;speechSynthesis.speak(u)}return}
+talking=true;stopRec();var opt={text:t,lang:"fr-FR",rate:k==="n"?0.92:0.98,volume:1,pitch:k==="n"?0.72:1.15,category:"ambient"};if(idx[k]!==undefined)opt.voice=idx[k];
+T.stop().catch(function(){}).then(function(){return T.speak(opt)}).then(function(){talking=false;if(want)setTimeout(loop,700)}).catch(function(){talking=false;if(want)setTimeout(loop,700)})}
+};
+if(TT())pickVoices();else setTimeout(pickVoices,1500);
 })();</script>
 </body>
 </html>
